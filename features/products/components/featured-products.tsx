@@ -1,3 +1,4 @@
+import { SectionHeading } from "@/components/shared/section-heading";
 import { ProductCard } from "@/features/products/components/product-card";
 import { buildPromotionMap } from "@/lib/pricing";
 import { getFeaturedProducts } from "@/services/products";
@@ -16,14 +17,11 @@ export async function FeaturedProducts() {
   return (
     <section id="destacados" className="bg-muted/30 py-16">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-8 space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Destacados
-          </h2>
-          <p className="text-muted-foreground">
-            Una selección de nuestros productos más populares.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Lo más pedido"
+          title="Destacados"
+          subtitle="Una selección de nuestros productos más populares."
+        />
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (

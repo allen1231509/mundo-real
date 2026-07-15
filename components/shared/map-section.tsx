@@ -1,3 +1,4 @@
+import { SectionHeading } from "@/components/shared/section-heading";
 import type { BusinessSettings } from "@/types";
 
 export function MapSection({ settings }: { settings: BusinessSettings }) {
@@ -9,14 +10,9 @@ export function MapSection({ settings }: { settings: BusinessSettings }) {
 
   return (
     <section id="ubicacion" className="mx-auto max-w-6xl px-4 py-16">
-      <div className="mb-8 space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-          Visítanos
-        </h2>
-        <p className="text-muted-foreground">{settings.address}</p>
-      </div>
+      <SectionHeading eyebrow="Visítanos" title="Encuéntranos" subtitle={settings.address} />
 
-      <div className="overflow-hidden rounded-2xl border">
+      <div className="overflow-hidden rounded-3xl border shadow-md">
         <iframe
           title={`Ubicación de ${settings.name}`}
           src={mapSrc}

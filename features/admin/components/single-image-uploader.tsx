@@ -6,6 +6,8 @@ import { useRef, useState, useTransition } from "react";
 
 import { uploadSettingsImageAction } from "@/actions/settings";
 
+const MAX_FILE_SIZE_MB = 10;
+
 export function SingleImageUploader({
   name,
   kind,
@@ -18,18 +20,36 @@ export function SingleImageUploader({
   aspect?: "square" | "wide";
 }) {
   const [url, setUrl] = useState(initialUrl ?? "");
+  const [error, setError] = useState<string | null>(null);
   const [isUploading, startUpload] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleFile(file: File | undefined) {
     if (!file) return;
+    setError(null);
+
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      setError(
+        `La imagen pesa ${(file.size / 1024 / 1024).toFixed(1)}MB. El máximo es ${MAX_FILE_SIZE_MB}MB.`,
+      );
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
 
     startUpload(async () => {
       const formData = new FormData();
       formData.set("file", file);
       formData.set("kind", kind);
-      const result = await uploadSettingsImageAction(formData);
-      if ("url" in result) setUrl(result.url);
+      try {
+        const result = await uploadSettingsImageAction(formData);
+        if ("url" in result) {
+          setUrl(result.url);
+        } else {
+          setError(result.error);
+        }
+      } catch {
+        setError("No se pudo subir la imagen. Intenta de nuevo.");
+      }
     });
 
     if (inputRef.current) inputRef.current.value = "";
@@ -70,6 +90,12 @@ export function SingleImageUploader({
           </button>
         )}
       </div>
+
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
 
       <input
         ref={inputRef}

@@ -6,6 +6,8 @@ import { useRef, useState, useTransition } from "react";
 
 import { uploadProductImageAction } from "@/actions/products";
 
+const MAX_FILE_SIZE_MB = 10;
+
 export function ImageGalleryUploader({
   name,
   initialImages,
@@ -14,20 +16,39 @@ export function ImageGalleryUploader({
   initialImages?: string[];
 }) {
   const [images, setImages] = useState<string[]>(initialImages ?? []);
+  const [error, setError] = useState<string | null>(null);
   const [isUploading, startUpload] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
     const fileArray = Array.from(files);
+    setError(null);
+
+    const tooLarge = fileArray.find(
+      (file) => file.size > MAX_FILE_SIZE_MB * 1024 * 1024,
+    );
+    if (tooLarge) {
+      setError(
+        `"${tooLarge.name}" pesa ${(tooLarge.size / 1024 / 1024).toFixed(1)}MB. El máximo es ${MAX_FILE_SIZE_MB}MB.`,
+      );
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
 
     startUpload(async () => {
       for (const file of fileArray) {
         const formData = new FormData();
         formData.set("file", file);
-        const result = await uploadProductImageAction(formData);
-        if ("url" in result) {
-          setImages((prev) => [...prev, result.url]);
+        try {
+          const result = await uploadProductImageAction(formData);
+          if ("url" in result) {
+            setImages((prev) => [...prev, result.url]);
+          } else {
+            setError(result.error);
+          }
+        } catch {
+          setError("No se pudo subir la imagen. Intenta de nuevo.");
         }
       }
     });
@@ -94,6 +115,12 @@ export function ImageGalleryUploader({
           <span className="text-xs">Agregar</span>
         </button>
       </div>
+
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
 
       <input
         ref={inputRef}

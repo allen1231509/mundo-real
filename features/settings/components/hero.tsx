@@ -1,19 +1,42 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageCircle, Palette } from "lucide-react";
-import Image from "next/image";
+import { Award, HandCoins, Headset, LayoutGrid, MessageCircle } from "lucide-react";
+import dynamic from "next/dynamic";
 
 import { Button } from "@/components/ui/button";
+import { Hero3DBoundary } from "@/features/settings/components/hero-3d-boundary";
+import { HeroSceneFallback } from "@/features/settings/components/hero-scene-fallback";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import type { BusinessSettings } from "@/types";
 
+const HeroScene = dynamic(
+  () => import("@/features/settings/components/hero-scene"),
+  { ssr: false, loading: () => <HeroSceneFallback /> },
+);
+
+const HERO_BENEFITS = [
+  { label: "Calidad Garantizada", icon: Award, color: "#e0218a" },
+  { label: "Precios Justos", icon: HandCoins, color: "#ffcf1a" },
+  { label: "Gran Variedad", icon: LayoutGrid, color: "#18b56b" },
+  { label: "Atención Personalizada", icon: Headset, color: "#12c2c2" },
+];
+
+function splitTitleHighlight(title: string) {
+  const words = title.trim().split(/\s+/);
+  if (words.length <= 2) return { lead: "", highlight: title };
+  return {
+    lead: words.slice(0, -2).join(" "),
+    highlight: words.slice(-2).join(" "),
+  };
+}
+
 export function Hero({ settings }: { settings: BusinessSettings }) {
-  const title =
-    settings.hero_title ?? "Todo para tus proyectos creativos, en Tarapoto";
+  const title = settings.hero_title ?? "Donde tus ideas cobran color";
   const subtitle =
     settings.hero_subtitle ??
-    "Arte, pintura, manualidades, telas y útiles escolares en un solo lugar. Calidad y variedad para cada proyecto.";
+    "Pinturas, telas, foami, papelería y útiles escolares. Todo lo que estudiantes, docentes, artistas y familias necesitan para crear.";
+  const { lead, highlight } = splitTitleHighlight(title);
   const whatsappUrl = settings.whatsapp
     ? buildWhatsAppUrl(
         settings.whatsapp,
@@ -22,45 +45,70 @@ export function Hero({ settings }: { settings: BusinessSettings }) {
     : null;
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-violet-600 via-fuchsia-500 to-orange-400 dark:from-violet-900 dark:via-fuchsia-800 dark:to-orange-700" />
-
-      <motion.div
+    <section
+      className="relative overflow-hidden bg-[length:300%_300%] bg-[linear-gradient(120deg,#fff0f7,#f3ecff,#fff6e6,#e8fbf6)] [animation:hero-gradient_16s_ease_infinite] dark:bg-[linear-gradient(120deg,#241a3d,#1c1830,#1a2e2c,#241a3d)]"
+    >
+      <div
         aria-hidden
-        className="absolute -top-24 -left-16 -z-10 size-72 rounded-full bg-yellow-300/50 blur-3xl"
-        animate={{ y: [0, 20, 0], x: [0, 15, 0] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -top-20 -left-16 -z-0 size-72 rounded-full opacity-40 blur-3xl [animation:hero-blob_14s_ease-in-out_infinite]"
+        style={{ background: "radial-gradient(circle, #e0218a, transparent 70%)" }}
       />
-      <motion.div
+      <div
         aria-hidden
-        className="absolute top-10 -right-20 -z-10 size-80 rounded-full bg-sky-300/40 blur-3xl"
-        animate={{ y: [0, -25, 0], x: [0, -10, 0] }}
-        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-10 -right-10 -z-0 size-72 rounded-full opacity-35 blur-3xl [animation:hero-blob_18s_ease-in-out_infinite_reverse]"
+        style={{ background: "radial-gradient(circle, #12c2c2, transparent 70%)" }}
       />
-      <motion.div
+      <div
         aria-hidden
-        className="absolute -bottom-24 left-1/3 -z-10 size-72 rounded-full bg-emerald-300/40 blur-3xl"
-        animate={{ y: [0, 20, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -bottom-24 left-1/3 -z-0 size-80 rounded-full opacity-30 blur-3xl [animation:hero-blob_20s_ease-in-out_infinite]"
+        style={{ background: "radial-gradient(circle, #ffcf1a, transparent 70%)" }}
       />
 
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 sm:py-28 lg:grid-cols-2">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 sm:py-24 lg:grid-cols-2 lg:py-28">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="space-y-6"
         >
-          <h1 className="font-heading text-4xl leading-tight font-extrabold tracking-tight text-white drop-shadow-sm sm:text-5xl lg:text-6xl">
-            {title}
+          <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-extrabold text-[#8b2fc9] shadow-md shadow-black/5 dark:bg-white/10 dark:text-[#c9a3ff]">
+            🎨 Arte y manualidades en Tarapoto
+          </span>
+          <h1 className="font-heading text-4xl leading-[1.05] font-extrabold tracking-tight text-[#2a2440] text-balance sm:text-5xl lg:text-6xl dark:text-white">
+            {lead ? `${lead} ` : ""}
+            <span className="bg-gradient-to-r from-[#e0218a] via-[#ff7a1a] to-[#ffcf1a] bg-clip-text text-transparent">
+              {highlight}
+            </span>
           </h1>
-          <p className="max-w-md text-lg text-white/90">{subtitle}</p>
-          <div className="flex flex-wrap gap-3">
+          <p className="max-w-md text-lg text-[#5a5372] dark:text-white/80">
+            {subtitle}
+          </p>
+
+          <div className="flex flex-wrap gap-x-7 gap-y-4 pt-1">
+            {HERO_BENEFITS.map(({ label, icon: Icon, color }) => (
+              <div
+                key={label}
+                className="flex w-24 flex-col items-center gap-2 text-center"
+              >
+                <span
+                  className="flex size-12 items-center justify-center rounded-full text-white shadow-lg"
+                  style={{ background: color, boxShadow: `0 8px 18px ${color}55` }}
+                >
+                  <Icon className="size-5" />
+                </span>
+                <span className="text-xs leading-tight font-extrabold text-[#4a4360] dark:text-white/85">
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap gap-4 pt-2">
             <Button
               size="lg"
               nativeButton={false}
               render={<a href="#categorias" />}
-              className="bg-white font-semibold text-violet-700 shadow-lg shadow-black/10 hover:bg-white/90"
+              className="h-auto rounded-2xl bg-gradient-to-r from-[#e0218a] to-[#8b2fc9] px-7 py-3.5 text-base font-extrabold text-white shadow-lg shadow-[#8b2fc9]/35 transition-transform hover:-translate-y-0.5 hover:brightness-105"
             >
               Explorar catálogo
             </Button>
@@ -76,7 +124,7 @@ export function Hero({ settings }: { settings: BusinessSettings }) {
                     rel="noopener noreferrer"
                   />
                 }
-                className="border-white/70 bg-white/10 text-white hover:bg-white/20"
+                className="h-auto rounded-2xl border-transparent bg-white px-7 py-3.5 text-base font-extrabold text-[#2a2440] shadow-lg shadow-black/10 transition-transform hover:-translate-y-0.5 dark:bg-white/10 dark:text-white"
               >
                 <MessageCircle className="size-4" />
                 Escríbenos
@@ -86,27 +134,14 @@ export function Hero({ settings }: { settings: BusinessSettings }) {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.92, rotate: -2 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-          className="relative aspect-4/3 overflow-hidden rounded-[2.5rem] bg-white/10 shadow-2xl ring-4 ring-white/40 backdrop-blur-sm"
+          className="relative h-[360px] sm:h-[440px] lg:h-[500px]"
         >
-          {settings.hero_banner ? (
-            <Image
-              src={settings.hero_banner}
-              alt={settings.name}
-              fill
-              priority
-              className="object-cover"
-            />
-          ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-3 text-white/70">
-              <Palette className="size-16" />
-              <span className="text-sm font-medium">
-                Imagen próximamente
-              </span>
-            </div>
-          )}
+          <Hero3DBoundary>
+            <HeroScene />
+          </Hero3DBoundary>
         </motion.div>
       </div>
     </section>

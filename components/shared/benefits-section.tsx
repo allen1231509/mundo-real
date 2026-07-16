@@ -3,31 +3,33 @@
 import { motion } from "framer-motion";
 import { Award, MapPin, MessageCircle, Sparkles } from "lucide-react";
 
+import { BRAND } from "@/lib/brand";
+
 const BENEFITS = [
   {
     icon: Sparkles,
     title: "Amplia variedad",
     description:
       "Arte, manualidades, telas, papeles y material escolar en un solo lugar.",
-    gradient: "from-fuchsia-500 to-purple-500",
+    color: BRAND.pink,
   },
   {
     icon: Award,
     title: "Calidad garantizada",
     description: "Materiales seleccionados pensando en cada proyecto.",
-    gradient: "from-amber-400 to-orange-500",
+    color: BRAND.purple,
   },
   {
     icon: MapPin,
     title: "En el corazón de Tarapoto",
     description: "Fácil de encontrar y visitar.",
-    gradient: "from-sky-400 to-blue-500",
+    color: BRAND.teal,
   },
   {
     icon: MessageCircle,
     title: "Atención cercana",
     description: "Te ayudamos a elegir por WhatsApp antes de tu visita.",
-    gradient: "from-emerald-400 to-teal-500",
+    color: BRAND.green,
   },
 ];
 
@@ -43,31 +45,36 @@ const itemVariants = {
 
 export function BenefitsSection() {
   return (
-    <motion.section
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-80px" }}
-      className="mx-auto max-w-6xl px-4 py-16"
-    >
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        {BENEFITS.map(({ icon: Icon, title, description, gradient }) => (
+    <section className="bg-[linear-gradient(120deg,#fff6e6,#e8fbf6)] py-16 dark:bg-[linear-gradient(120deg,#241a3d,#1a2e2c)]">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-80px" }}
+        className="mx-auto grid max-w-6xl gap-8 px-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {BENEFITS.map(({ icon: Icon, title, description, color }) => (
           <motion.div
             key={title}
             variants={itemVariants}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="space-y-3 text-center sm:text-left"
+            className="text-center"
           >
             <div
-              className={`mx-auto flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${gradient} text-white shadow-md sm:mx-0`}
+              className="mx-auto flex size-[76px] items-center justify-center rounded-[22px] text-white shadow-lg"
+              style={{ background: color, boxShadow: `0 12px 26px ${color}4d` }}
             >
-              <Icon className="size-7" />
+              <Icon className="size-8" />
             </div>
-            <h3 className="font-heading font-bold">{title}</h3>
-            <p className="text-sm text-muted-foreground">{description}</p>
+            <h3 className="font-heading mt-4 font-bold text-[#2a2440] dark:text-white">
+              {title}
+            </h3>
+            <p className="mt-1.5 text-sm text-[#5a5372] dark:text-white/70">
+              {description}
+            </p>
           </motion.div>
         ))}
-      </div>
-    </motion.section>
+      </motion.div>
+    </section>
   );
 }

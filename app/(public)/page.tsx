@@ -1,5 +1,7 @@
 import { BenefitsSection } from "@/components/shared/benefits-section";
 import { MapSection } from "@/components/shared/map-section";
+import { MarqueeRibbon } from "@/components/shared/marquee-ribbon";
+import { ProjectsBanner } from "@/components/shared/projects-banner";
 import { StorySection } from "@/components/shared/story-section";
 import { CategoryGrid } from "@/features/categories/components/category-grid";
 import { FeaturedProducts } from "@/features/products/components/featured-products";
@@ -17,7 +19,9 @@ export default async function HomePage() {
   return (
     <>
       <Hero settings={settings} />
+      <MarqueeRibbon />
       <CategoryGrid />
+      <ProjectsBanner />
       <FeaturedProducts />
       <PromotionsSection />
       <BenefitsSection />

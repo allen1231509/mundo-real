@@ -1,5 +1,6 @@
 import { SectionHeading } from "@/components/shared/section-heading";
 import { ProductCard } from "@/features/products/components/product-card";
+import { BRAND } from "@/lib/brand";
 import { buildPromotionMap } from "@/lib/pricing";
 import { getFeaturedProducts } from "@/services/products";
 import { getActivePromotionsWithProducts } from "@/services/promotions";
@@ -15,10 +16,11 @@ export async function FeaturedProducts() {
   const promotionMap = buildPromotionMap(promotions);
 
   return (
-    <section id="destacados" className="bg-muted/30 py-16">
+    <section id="destacados" className="bg-[#f7f4ff] py-16 dark:bg-white/[.03]">
       <div className="mx-auto max-w-6xl px-4">
         <SectionHeading
           eyebrow="Lo más pedido"
+          eyebrowColor={BRAND.purple}
           title="Destacados"
           subtitle="Una selección de nuestros productos más populares."
         />

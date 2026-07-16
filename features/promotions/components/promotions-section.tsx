@@ -1,4 +1,5 @@
 import { SectionHeading } from "@/components/shared/section-heading";
+import { BRAND } from "@/lib/brand";
 import { getActivePromotions } from "@/services/promotions";
 import { getBusinessSettings } from "@/services/settings";
 
@@ -15,7 +16,8 @@ export async function PromotionsSection() {
   return (
     <section id="promociones" className="mx-auto max-w-6xl px-4 py-16">
       <SectionHeading
-        eyebrow="Ofertas"
+        eyebrow="Aprovecha"
+        eyebrowColor={BRAND.orange}
         title="Promociones"
         subtitle="Aprovecha nuestros descuentos por tiempo limitado."
       />

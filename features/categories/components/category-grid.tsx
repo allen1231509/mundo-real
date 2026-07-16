@@ -1,4 +1,5 @@
 import { SectionHeading } from "@/components/shared/section-heading";
+import { BRAND } from "@/lib/brand";
 import { getCategories } from "@/services/categories";
 
 import { CategoryGridClient } from "./category-grid-client";
@@ -11,7 +12,8 @@ export async function CategoryGrid() {
   return (
     <section id="categorias" className="mx-auto max-w-6xl px-4 py-16">
       <SectionHeading
-        eyebrow="Explora"
+        eyebrow="Explora por"
+        eyebrowColor={BRAND.pink}
         title="Categorías"
         subtitle="Encuentra justo lo que necesitas para tu próximo proyecto."
       />

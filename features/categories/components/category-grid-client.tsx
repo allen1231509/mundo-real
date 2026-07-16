@@ -30,7 +30,7 @@ export function CategoryGridClient({
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-80px" }}
-      className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5"
+      className="grid grid-cols-2 gap-5 sm:grid-cols-3"
     >
       {categories.map((category) => {
         const textColor = getReadableTextColor(category.color);
@@ -40,24 +40,29 @@ export function CategoryGridClient({
             key={category.id}
             variants={cardVariants}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            whileHover={{ y: -4, rotate: -1, scale: 1.03 }}
+            whileHover={{ y: -6, scale: 1.02 }}
           >
             <Link
               href={`/catalogo?categoria=${category.slug}`}
-              className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-3xl p-5 text-center shadow-md transition-shadow hover:shadow-xl"
-              style={{ backgroundColor: category.color, color: textColor }}
+              className="group relative flex min-h-[170px] flex-col overflow-hidden rounded-[26px] p-7 shadow-md transition-shadow hover:shadow-xl"
+              style={{
+                backgroundColor: category.color,
+                color: textColor,
+                boxShadow: `0 16px 34px -8px ${category.color}66`,
+              }}
             >
-              <div
+              <DynamicIcon
+                icon={category.icon}
                 aria-hidden
-                className="absolute -top-6 -right-6 size-20 rounded-full bg-white/15 transition-transform duration-300 group-hover:scale-125"
+                className="absolute -right-4 -bottom-4 size-28 opacity-20 transition-transform duration-300 group-hover:scale-110"
               />
               <div
-                className="relative flex size-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm"
+                className="relative flex size-[52px] items-center justify-center rounded-2xl bg-white/22"
                 style={{ color: textColor }}
               >
-                <DynamicIcon icon={category.icon} className="size-7" />
+                <DynamicIcon icon={category.icon} className="size-6" />
               </div>
-              <span className="font-heading relative text-base font-bold">
+              <span className="font-heading relative mt-5 text-lg font-bold">
                 {category.name}
               </span>
             </Link>

@@ -12,7 +12,7 @@ export function MapSection({ settings }: { settings: BusinessSettings }) {
     <section id="ubicacion" className="mx-auto max-w-6xl px-4 py-16">
       <SectionHeading eyebrow="Visítanos" title="Encuéntranos" subtitle={settings.address} />
 
-      <div className="overflow-hidden rounded-3xl border shadow-md">
+      <div className="overflow-hidden rounded-3xl border border-[#2a2440]/10 shadow-md dark:border-white/10">
         <iframe
           title={`Ubicación de ${settings.name}`}
           src={mapSrc}
